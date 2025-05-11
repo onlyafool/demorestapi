@@ -5,7 +5,9 @@ Dieses Projekt ist eine einfache REST-API für Benutzer- und Eventverwaltung. Di
 ## Features
 - Benutzerregistrierung und Login mit Passwort-Hashing (bcrypt)
 - Authentifizierung mit JSON Web Tokens (JWT)
-- CRUD-Operationen für Events (Erstellen, Bearbeiten, Löschen, Anzeigen)
+- **Events sind an Benutzer gebunden (user_id)**
+- **Nur der Ersteller kann sein Event bearbeiten oder löschen (Berechtigungsprüfung)**
+- Vollständige CRUD-Operationen für Events (Erstellen, Bearbeiten, Löschen, Anzeigen)
 - Speicherung aller Daten in einer SQLite-Datenbank
 - Moderne Projektstruktur mit Controllern, Models und Routen
 
@@ -16,6 +18,30 @@ Dieses Projekt ist eine einfache REST-API für Benutzer- und Eventverwaltung. Di
 - **bcrypt**: Passwort-Hashing
 - **jsonwebtoken**: Token-basierte Authentifizierung
 - **Git**: Versionskontrolle
+
+## API-Überblick
+
+### Authentifizierung
+- Registrierung: `/users/signup`
+- Login: `/users/login`
+- Alle Event-Routen (POST, PUT, DELETE) erfordern einen gültigen JWT im Header: `Authorization: Bearer <token>`
+
+### Events
+- Event erstellen: `POST /events` (authentifiziert)
+- Event bearbeiten: `PUT /events/:id` (nur Ersteller, authentifiziert)
+- Event löschen: `DELETE /events/:id` (nur Ersteller, authentifiziert)
+- Alle Events abrufen: `GET /events`
+- Einzelnes Event abrufen: `GET /events/:id`
+
+### Datenbankstruktur (Events)
+| Feld        | Typ     | Beschreibung                |
+|-------------|---------|-----------------------------|
+| id          | INTEGER | Primärschlüssel             |
+| title       | TEXT    | Titel des Events            |
+| description | TEXT    | Beschreibung                |
+| address     | TEXT    | Adresse                     |
+| date        | TEXT    | Datum (ISO-Format)          |
+| user_id     | INTEGER | ID des Erstellers (Benutzer)|
 
 ## Projektstruktur
 ```
