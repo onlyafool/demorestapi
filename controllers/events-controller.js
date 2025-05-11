@@ -28,7 +28,8 @@ export async function createNewEvent(req, res) {
       title: title.trim(), 
       description: description.trim(), 
       address: address.trim(), 
-      date: date.trim() 
+      date: date.trim(),
+      user_id: req.userData.userId
     });
     
     res.status(201).json({

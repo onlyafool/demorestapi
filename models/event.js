@@ -1,9 +1,9 @@
 import db from '../database.js';
 
-export function createEvent({ title, description, address, date }) {
-  const stmt = db.prepare('INSERT INTO events (title, description, address, date) VALUES (?, ?, ?, ?)');
-  const info = stmt.run(title, description, address, date);
-  return { id: info.lastInsertRowid, title, description, address, date };
+export function createEvent({ title, description, address, date, user_id }) {
+  const stmt = db.prepare('INSERT INTO events (title, description, address, date, user_id) VALUES (?, ?, ?, ?, ?)');
+  const info = stmt.run(title, description, address, date, user_id);
+  return { id: info.lastInsertRowid, title, description, address, date, user_id };
 }
 
 export function editEvent(id, { title, description, address, date }) {

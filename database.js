@@ -18,7 +18,9 @@ db.prepare(`
     title TEXT NOT NULL,
     description TEXT,
     address TEXT,
-    date TEXT
+    date TEXT,
+    user_id INTEGER,
+    FOREIGN KEY (user_id) REFERENCES users(id)
   )
 `).run();
 
