@@ -1,6 +1,6 @@
 import { createEvent, editEvent, deleteEvent, getAllEvents, getEventById } from '../models/event.js';
 
-export async function createNewEvent(req, res) {
+export async function create(req, res) {
   try {
     const { title, description, address, date } = req.body;
     
@@ -46,10 +46,21 @@ export async function createNewEvent(req, res) {
   }
 }
 
-export async function updateEvent(req, res) {
+export async function edit(req, res) {
   try {
     const eventId = req.params.id;
     const { title, description, address, date } = req.body;
+    
+    // Überprüfen, ob das Event existiert
+    const existingEvent = getEventById(eventId);
+    if (!existingEvent) {
+      return res.status(404).json({ message: 'Event nicht gefunden.' });
+    }
+    
+    // Überprüfen, ob der Benutzer der Eigentümer des Events ist
+    if (existingEvent.user_id !== req.userData.userId) {
+      return res.status(403).json({ message: 'Keine Berechtigung zum Bearbeiten dieses Events.' });
+    }
     
     // Validierung aller erforderlichen Felder
     const requiredFields = {
@@ -78,10 +89,6 @@ export async function updateEvent(req, res) {
       date: date.trim() 
     });
     
-    if (!success) {
-      return res.status(404).json({ message: 'Event nicht gefunden.' });
-    }
-    
     const updatedEvent = getEventById(eventId);
     res.json({ 
       message: 'Event erfolgreich aktualisiert.',
@@ -97,15 +104,23 @@ export async function updateEvent(req, res) {
   }
 }
 
-export async function removeEvent(req, res) {
+export async function deleteItem(req, res) {
   try {
     const eventId = req.params.id;
     
-    const success = deleteEvent(eventId);
+    // Überprüfen, ob das Event existiert
+    const existingEvent = getEventById(eventId);
     
-    if (!success) {
+    if (!existingEvent) {
       return res.status(404).json({ message: 'Event nicht gefunden.' });
     }
+    
+    // Überprüfen, ob der Benutzer der Eigentümer des Events ist
+    if (existingEvent.user_id !== req.userData.userId) {
+      return res.status(403).json({ message: 'Keine Berechtigung zum Löschen dieses Events.' });
+    }
+    
+    const success = deleteEvent(eventId);
     
     res.json({ message: 'Event erfolgreich gelöscht.' });
   } catch (error) {
@@ -114,7 +129,7 @@ export async function removeEvent(req, res) {
   }
 }
 
-export async function getEvents(req, res) {
+export async function getAll(req, res) {
   try {
     const events = getAllEvents();
     
@@ -128,7 +143,7 @@ export async function getEvents(req, res) {
   }
 }
 
-export async function getEvent(req, res) {
+export async function getOne(req, res) {
   try {
     const eventId = req.params.id;
     
