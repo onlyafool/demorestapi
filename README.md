@@ -53,4 +53,21 @@ Dieses Projekt ist eine einfache REST-API für Benutzer- und Eventverwaltung. Di
 | user_id     | INTEGER | ID des Erstellers (Benutzer)|
 
 ## Projektstruktur
-```
+
+## Hinweise zu .gitignore
+
+Die folgenden Dateien werden über die `.gitignore` vom Repository ausgeschlossen und nicht versioniert:
+
+- `event1.jpeg` (Beispielbild)
+- `event2.jpg` (Beispielbild)
+- `node-demo-project-finished.zip` (Demo-Archiv)
+
+Diese Dateien dienen nur zu Test- oder Demo-Zwecken und sollten nicht ins Repository gelangen.
+
+## Weitere Hinweise
+
+### CORS-Unterstützung
+Die API unterstützt Cross-Origin Resource Sharing (CORS) und kann somit problemlos von Frontend-Anwendungen (z.B. React, Angular, Vue) aus anderen Domains angesprochen werden.
+
+### Statische Dateien
+Das Verzeichnis `public` wird automatisch als statischer Ordner bereitgestellt. Hochgeladene Bilder (z.B. Event-Bilder) sind dadurch direkt über eine URL wie `http://localhost:3000/images/<dateiname>` erreichbar.
