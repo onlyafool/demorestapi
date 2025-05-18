@@ -10,6 +10,7 @@ Dieses Projekt ist eine einfache REST-API für Benutzer- und Eventverwaltung. Di
 - Vollständige CRUD-Operationen für Events (Erstellen, Bearbeiten, Löschen, Anzeigen)
 - Speicherung aller Daten in einer SQLite-Datenbank
 - Moderne Projektstruktur mit Controllern, Models und Routen
+- **Bild-Upload für Events (mit Validierung von Dateityp und -größe, Speicherung im Verzeichnis `public/images/`)**
 
 ## Verwendete Technologien
 - **Node.js**: JavaScript-Laufzeitumgebung
@@ -17,6 +18,7 @@ Dieses Projekt ist eine einfache REST-API für Benutzer- und Eventverwaltung. Di
 - **better-sqlite3**: Schnelle SQLite-Bibliothek für Node.js
 - **bcrypt**: Passwort-Hashing
 - **jsonwebtoken**: Token-basierte Authentifizierung
+- **multer**: Middleware für Datei-Uploads
 - **Git**: Versionskontrolle
 
 ## API-Überblick
@@ -27,11 +29,17 @@ Dieses Projekt ist eine einfache REST-API für Benutzer- und Eventverwaltung. Di
 - Alle Event-Routen (POST, PUT, DELETE) erfordern einen gültigen JWT im Header: `Authorization: Bearer <token>`
 
 ### Events
-- Event erstellen: `POST /events` (authentifiziert)
-- Event bearbeiten: `PUT /events/:id` (nur Ersteller, authentifiziert)
+- Event erstellen: `POST /events` (authentifiziert, **erfordert Bild-Upload**)
+- Event bearbeiten: `PUT /events/:id` (nur Ersteller, authentifiziert, **erfordert Bild-Upload**)
 - Event löschen: `DELETE /events/:id` (nur Ersteller, authentifiziert)
 - Alle Events abrufen: `GET /events`
 - Einzelnes Event abrufen: `GET /events/:id`
+
+#### Bild-Upload Hinweise
+- Beim Erstellen und Bearbeiten eines Events muss ein Bild mit dem Feldnamen `image` als `multipart/form-data` hochgeladen werden.
+- Unterstützte Formate: alle Bildformate (`image/*`)
+- Maximale Dateigröße: 5MB
+- Das Bild wird im Verzeichnis `public/images/` gespeichert und der Dateiname in der Datenbank hinterlegt.
 
 ### Datenbankstruktur (Events)
 | Feld        | Typ     | Beschreibung                |
@@ -41,36 +49,8 @@ Dieses Projekt ist eine einfache REST-API für Benutzer- und Eventverwaltung. Di
 | description | TEXT    | Beschreibung                |
 | address     | TEXT    | Adresse                     |
 | date        | TEXT    | Datum (ISO-Format)          |
+| image       | TEXT    | Dateiname des Event-Bildes  |
 | user_id     | INTEGER | ID des Erstellers (Benutzer)|
 
 ## Projektstruktur
 ```
-├── app.js
-├── controllers/
-│   ├── users-controller.js
-│   └── events-controller.js
-├── models/
-│   ├── user.js
-│   └── event.js
-├── routes/
-│   ├── users.js
-│   └── events.js
-├── util/
-│   └── auth.js
-├── database.js
-├── database.sqlite
-├── package.json
-└── README.md
-```
-
-## Schnellstart
-1. Repository klonen
-2. Abhängigkeiten installieren: `npm install`
-3. Server starten: `npm start`
-
-Die API läuft standardmäßig auf `http://localhost:3000`.
-
----
-
-**Hinweis:**
-Dieses Projekt dient als Demo und kann beliebig erweitert werden. 
