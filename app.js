@@ -1,11 +1,15 @@
 import express from 'express';
+import cors from 'cors';
 import usersRouter from './routes/users.js';
 import eventRouter from './routes/events.js';
-import db from './database.js';
+import db from './database.js'; 
+
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
+app.use(express.static('public'));
 
 app.use('/users', usersRouter);
 app.use('/events', eventRouter);
