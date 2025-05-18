@@ -19,7 +19,18 @@ db.prepare(`
     description TEXT,
     address TEXT,
     date TEXT,
+    image TEXT,
     user_id INTEGER,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  )
+`).run();
+
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS registrations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    event_id INTEGER,
+    user_id INTEGER,
+    FOREIGN KEY (event_id) REFERENCES events(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
   )
 `).run();
